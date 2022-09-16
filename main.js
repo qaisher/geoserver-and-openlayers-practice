@@ -3,58 +3,58 @@
 window.onload = init;
 function init() {
 
-  const shaft = new ol.style.RegularShape({
-    points: 2,
-    radius: 5,
-    stroke: new ol.style.Stroke({
-      width: 2,
-      color: 'black',
-    }),
-    rotateWithView: true,
-  });
+  // const shaft = new ol.style.RegularShape({
+  //   points: 2,
+  //   radius: 5,
+  //   stroke: new ol.style.Stroke({
+  //     width: 2,
+  //     color: 'black',
+  //   }),
+  //   rotateWithView: true,
+  // });
 
-  const head = new ol.style.RegularShape({
-    points: 3,
-    radius: 5,
-    fill: new ol.style.Fill({
-      color: 'black',
-    }),
-    rotateWithView: true,
-  });
+  // const head = new ol.style.RegularShape({
+  //   points: 3,
+  //   radius: 5,
+  //   fill: new ol.style.Fill({
+  //     color: 'black',
+  //   }),
+  //   rotateWithView: true,
+  // });
 
-  const styles = [new ol.style.Style({ image: shaft }), new ol.style.Style({ image: head })];
+  // const styles = [new ol.style.Style({ image: shaft }), new ol.style.Style({ image: head })];
 
-  const VectorSource = new ol.source.Vector({
-    attributions:
-      'Weather data by <a href="https://openweathermap.org/current">OpenWeather</a>',
-  });
+  // const VectorSource = new ol.source.Vector({
+  //   attributions:
+  //     'Weather data by <a href="https://openweathermap.org/current">OpenWeather</a>',
+  // });
 
 
-  var OSMsource = new ol.source.OSM();
+ // var OSMsource = new ol.source.OSM();
   var map = new ol.Map({
     target: 'map',
     layers: [
+      // new ol.layer.Tile({
+      //   source: OSMsource
+      // }),
+
+      // new ol.layer.Tile({
+      //   source: new ol.source.TileWMS({
+      //     url: 'http://localhost:8080/geoserver/wind/wms',
+      //     params: {'LAYERS': 'wind:ne_110m_geography_regions_polys', 'TILED': true},
+      //     serverType: 'geoserver',
+      //     transition: 0
+      //   })
+      // }),
+
       new ol.layer.Tile({
-        source: OSMsource
+        source: new ol.source.TileWMS({
+          url: 'http://localhost:8080/geoserver/wind/wms',
+          params: {'LAYERS': 'wind:HYP_50M_SR_W', 'TILED': true},
+          serverType: 'geoserver',
+          transition: 0
+        })
       }),
-
-      // new ol.layer.Tile({
-      //   source: new ol.source.TileWMS({
-      //     url: 'http://localhost:8080/geoserver/wind/wms',
-      //     params: {'LAYERS': 'wind:ne_50m_populated_places', 'TILED': true},
-      //     serverType: 'geoserver',
-      //     transition: 0
-      //   })
-      // }),
-
-      // new ol.layer.Tile({
-      //   source: new ol.source.TileWMS({
-      //     url: 'http://localhost:8080/geoserver/wind/wms',
-      //     params: {'LAYERS': 'wind:NE1_50M_SR_W', 'TILED': true},
-      //     serverType: 'geoserver',
-      //     transition: 0
-      //   })
-      // }),
       // new ol.layer.Tile({
       //   source: new ol.source.TileWMS({
       //     url: 'http://localhost:8080/geoserver/wind/wms',
@@ -64,24 +64,24 @@ function init() {
       //   })
       // }),
 
-      new ol.layer.Vector({
-        source: VectorSource,
+      // new ol.layer.Vector({
+      //   source: VectorSource,
         
-        style: function (feature) {
-          const wind = feature.get('wind');
-          // rotate arrow away from wind origin
-          const angle = ((wind.deg - 180) * Math.PI) / 180;
-          const scale = wind.speed / 10;
-          shaft.setScale([1, scale]);
-          shaft.setRotation(angle);
-          head.setDisplacement([
-            0,
-            head.getRadius() / 2 + shaft.getRadius() * scale,
-          ]);
-          head.setRotation(angle);
-          return styles;
-        },
-      })
+      //   style: function (feature) {
+      //     const wind = feature.get('wind');
+      //     // rotate arrow away from wind origin
+      //     const angle = ((wind.deg - 180) * Math.PI) / 180;
+      //     const scale = wind.speed / 10;
+      //     shaft.setScale([1, scale]);
+      //     shaft.setRotation(angle);
+      //     head.setDisplacement([
+      //       0,
+      //       head.getRadius() / 2 + shaft.getRadius() * scale,
+      //     ]);
+      //     head.setRotation(angle);
+      //     return styles;
+      //   },
+      // })
 
     ],
     view: new ol.View({
@@ -94,24 +94,24 @@ function init() {
   });
 
 
-  fetch('./resources/v6.15.1/examples/data/openweather/weather.json')
-  .then(function (response) {
-    return response.json();
-  })
-  .then(function (data) {
-    //console.log(data);
-    const features = [];
-    data.list.forEach(function (report) {
-      const feature = new ol.Feature(
-        new ol.geom.Point(ol.proj.fromLonLat([report.coord.lon, report.coord.lat]))
-      );
-      //console.log(feature);
-      feature.setProperties(report);
-      features.push(feature);
-    });
-    VectorSource.addFeatures(features);
-    map.getView().fit(VectorSource.getExtent());
-  });
+  // fetch('./resources/v6.15.1/examples/data/openweather/weather.json')
+  // .then(function (response) {
+  //   return response.json();
+  // })
+  // .then(function (data) {
+  //   //console.log(data);
+  //   const features = [];
+  //   data.list.forEach(function (report) {
+  //     const feature = new ol.Feature(
+  //       new ol.geom.Point(ol.proj.fromLonLat([report.coord.lon, report.coord.lat]))
+  //     );
+  //     //console.log(feature);
+  //     feature.setProperties(report);
+  //     features.push(feature);
+  //   });
+  //   VectorSource.addFeatures(features);
+  //   map.getView().fit(VectorSource.getExtent());
+  // });
 
 
   map.on('click', (e) => console.log(e.coordinate));
